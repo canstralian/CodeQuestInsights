@@ -14,9 +14,9 @@ export default function Header() {
         </div>
         <nav>
           <ul className="flex space-x-4">
-            <li><Link href="/"><a className="hover:text-github-green">Dashboard</a></Link></li>
-            <li><a href="#" className="hover:text-github-green">History</a></li>
-            <li><a href="#" className="hover:text-github-green">Documentation</a></li>
+            <li><Link href="/" className="hover:text-github-green">Dashboard</Link></li>
+            <li><Link href="#" className="hover:text-github-green">History</Link></li>
+            <li><Link href="#" className="hover:text-github-green">Documentation</Link></li>
           </ul>
         </nav>
       </div>

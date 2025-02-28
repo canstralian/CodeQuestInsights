@@ -51,6 +51,14 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        // GitHub colors
+        "github-dark": "#24292E",
+        "github-light": "#F6F8FA",
+        "github-green": "#2EA44F",
+        "github-orange": "#FCA321",
+        "github-gray": "#586069",
+        "github-blue": "#0366D6",
+        "github-red": "#D73A49",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
