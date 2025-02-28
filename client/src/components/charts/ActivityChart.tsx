@@ -1,15 +1,24 @@
 import { useEffect, useRef } from 'react';
-import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend } from 'chart.js';
-import { CommitHistory } from '@shared/schema';
+import { Chart, LineController, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend } from 'chart.js';
 
-Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend);
+// Register the required components
+Chart.register(LineController, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 interface ActivityChartProps {
-  data: CommitHistory[];
+  data: {
+    labels: string[];
+    datasets: {
+      label: string;
+      data: number[];
+      backgroundColor?: string;
+      borderColor?: string;
+      borderWidth?: number;
+    }[];
+  };
 }
 
 export default function ActivityChart({ data }: ActivityChartProps) {
-  const chartRef = useRef<HTMLCanvasElement>(null);
+  const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstance = useRef<Chart | null>(null);
 
   useEffect(() => {
@@ -25,28 +34,18 @@ export default function ActivityChart({ data }: ActivityChartProps) {
 
     chartInstance.current = new Chart(ctx, {
       type: 'line',
-      data: {
-        labels: data.map(d => d.month),
-        datasets: [{
-          label: 'Commits',
-          data: data.map(d => d.count),
-          borderColor: '#2EA44F',
-          backgroundColor: 'rgba(46, 164, 79, 0.1)',
-          tension: 0.3,
-          fill: true
-        }]
-      },
+      data: data,
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            display: false
+            position: 'top',
           },
           tooltip: {
             mode: 'index',
-            intersect: false
-          }
+            intersect: false,
+          },
         },
         scales: {
           y: {
