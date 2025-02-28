@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, BarController } from 'chart.js';
 import { GrowthMetric } from '@shared/schema';
 
-Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, BarController);
 
 interface EngagementChartProps {
   data: GrowthMetric[];

@@ -1,20 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { Chart, LineController, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend } from 'chart.js';
+import { CommitHistory } from '@shared/schema';
 
 // Register the required components
 Chart.register(LineController, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 interface ActivityChartProps {
-  data: {
-    labels: string[];
-    datasets: {
-      label: string;
-      data: number[];
-      backgroundColor?: string;
-      borderColor?: string;
-      borderWidth?: number;
-    }[];
-  };
+  data: CommitHistory[];
 }
 
 export default function ActivityChart({ data }: ActivityChartProps) {
@@ -32,9 +24,21 @@ export default function ActivityChart({ data }: ActivityChartProps) {
     const ctx = chartRef.current.getContext('2d');
     if (!ctx) return;
 
+    const chartData = {
+      labels: data.map(item => item.month),
+      datasets: [{
+        label: 'Commits',
+        data: data.map(item => item.count),
+        backgroundColor: 'rgba(46, 164, 79, 0.2)',
+        borderColor: 'rgba(46, 164, 79, 1)',
+        borderWidth: 2,
+        tension: 0.3
+      }]
+    };
+
     chartInstance.current = new Chart(ctx, {
       type: 'line',
-      data: data,
+      data: chartData,
       options: {
         responsive: true,
         maintainAspectRatio: false,
