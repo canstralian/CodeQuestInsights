@@ -3,11 +3,48 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+  }
+
   * {
     @apply border-border;
   }
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+  }
+
+  /* Custom GitHub theme styles */
+  .dark .bg-github-light {
+    @apply bg-gray-900;
+  }
+  
+  .dark .text-github-dark {
+    @apply text-gray-100;
+  }
+  
+  /* Make card backgrounds slightly darker in dark mode */
+  .dark .bg-white {
+    @apply bg-gray-800;
+  }
+  
+  .dark .text-gray-700 {
+    @apply text-gray-200;
+  }
+  
+  .dark .text-gray-500 {
+    @apply text-gray-400;
+  }
+  
+  /* Code blocks and syntax highlighting in dark mode */
+  .dark pre, .dark code {
+    @apply bg-gray-900 text-gray-100;
   }
 }

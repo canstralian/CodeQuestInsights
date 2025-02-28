@@ -1,8 +1,9 @@
 import { Link } from "wouter";
+import { ThemeToggle } from "./ThemeToggle";
 
 export default function Header() {
   return (
-    <header className="bg-github-dark text-white p-4 shadow-md">
+    <header className="bg-github-dark text-white p-4 shadow-md dark:bg-gray-900">
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" className="text-github-green">
@@ -12,13 +13,16 @@ export default function Header() {
             <h1 className="text-xl font-semibold tracking-tight cursor-pointer">Repository Analyzer</h1>
           </Link>
         </div>
-        <nav>
-          <ul className="flex space-x-4">
-            <li><Link href="/" className="hover:text-github-green">Dashboard</Link></li>
-            <li><Link href="#" className="hover:text-github-green">History</Link></li>
-            <li><Link href="#" className="hover:text-github-green">Documentation</Link></li>
-          </ul>
-        </nav>
+        <div className="flex items-center">
+          <nav className="mr-4">
+            <ul className="flex space-x-4">
+              <li><Link href="/" className="hover:text-github-green">Dashboard</Link></li>
+              <li><Link href="#" className="hover:text-github-green">History</Link></li>
+              <li><Link href="#" className="hover:text-github-green">Documentation</Link></li>
+            </ul>
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

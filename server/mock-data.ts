@@ -1,218 +1,164 @@
-import { RepositoryAnalysis } from "@shared/schema";
+import { 
+  RepositoryAnalysis, 
+  CommitHistory, 
+  ActivitySummary, 
+  GrowthMetric,
+  CommunityMetric,
+  QualityMetric,
+  KeyFinding,
+  Highlight,
+  Recommendation,
+  Capability
+} from "@shared/schema";
 
-// Generate a random number within a range
-const randomNum = (min: number, max: number): number => {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
-
-// Generate random repository data for demonstration purposes
+/**
+ * Generate mock data for repository analysis
+ * This function creates a comprehensive mock analysis for any repository URL
+ */
 export const mockAnalyzeRepository = (url: string): RepositoryAnalysis => {
-  // Extract repository name from URL
-  const urlParts = url.split("/");
-  const repoName = urlParts[urlParts.length - 1] || "repository";
-  const ownerName = urlParts[urlParts.length - 2] || "owner";
+  // Extract repository name and owner from URL
+  const urlParts = url.split('/');
+  const repoName = urlParts[urlParts.length - 1] || 'repository';
+  const owner = urlParts[urlParts.length - 2] || 'owner';
   
-  // Random score between 65 and 95
-  const overallScore = randomNum(65, 95);
+  // Generate random repository info
+  const stars = Math.floor(Math.random() * 10000).toLocaleString();
+  const forks = Math.floor(Math.random() * 1000).toLocaleString();
+  const issues = Math.floor(Math.random() * 200).toLocaleString();
+  const contributors = Math.floor(Math.random() * 50).toLocaleString();
   
-  // Generate random commit history for the past 6 months
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
-  const commitHistory = months.map(month => ({
-    month,
-    count: randomNum(5, 100)
-  }));
+  // Overall score (0-100)
+  const overallScore = Math.floor(Math.random() * 30) + 70;
   
-  // Generate random growth metrics
-  const growthCategories = ["Stars", "Forks", "Contributors", "Issues Closed"];
-  const growthMetrics = growthCategories.map(category => ({
-    category,
-    growthPercentage: randomNum(5, 40)
-  }));
+  // Generate mock commit history (last 12 months)
+  const commitHistory: CommitHistory[] = [];
+  const now = new Date();
+  for (let i = 11; i >= 0; i--) {
+    const month = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const monthName = month.toLocaleString('default', { month: 'short' });
+    const count = Math.floor(Math.random() * 200) + 10;
+    commitHistory.push({ month: monthName, count });
+  }
   
-  // Generate random capabilities
-  const capabilityNames = [
-    "Code Organization", 
-    "Documentation", 
-    "Testing", 
-    "CI/CD", 
-    "Issue Management", 
-    "Community Engagement"
+  // Activity summary metrics
+  const activitySummary: ActivitySummary[] = [
+    { label: "Commits (30 days)", value: `${Math.floor(Math.random() * 200) + 20}` },
+    { label: "Pull Requests", value: `${Math.floor(Math.random() * 50) + 5}` },
+    { label: "Contributors", value: contributors },
+    { label: "Issues Closed", value: `${Math.floor(Math.random() * 100) + 10}` }
   ];
   
-  const getRating = (score: number): string => {
-    if (score >= 90) return "Excellent";
-    if (score >= 80) return "Very Good";
-    if (score >= 70) return "Good";
-    if (score >= 60) return "Fair";
-    return "Needs Improvement";
-  };
-
-  const capabilities = capabilityNames.map(name => {
-    const score = randomNum(50, 95);
-    return {
-      name,
-      score,
-      rating: getRating(score),
-      description: `Evaluation of ${name.toLowerCase()} practices and implementation.`
-    };
-  });
+  // Growth metrics
+  const growthMetrics: GrowthMetric[] = [
+    { category: "Stars", growthPercentage: Math.floor(Math.random() * 100) - 20 },
+    { category: "Forks", growthPercentage: Math.floor(Math.random() * 80) + 10 },
+    { category: "Contributors", growthPercentage: Math.floor(Math.random() * 60) + 5 },
+    { category: "Issues", growthPercentage: Math.floor(Math.random() * 40) - 10 }
+  ];
   
-  // Random language color
-  const languageColors: Record<string, string> = {
+  // Community metrics
+  const communityMetrics: CommunityMetric[] = [
+    { name: "Documentation", value: `${Math.floor(Math.random() * 100)}%`, type: "percentage" },
+    { name: "Issue Response Time", value: `${Math.floor(Math.random() * 72)}h`, type: "status" },
+    { name: "Community Support", value: Math.random() > 0.5 ? "High" : "Medium", type: "status" },
+    { name: "Contribution Guide", value: Math.random() > 0.3 ? "Present" : "Missing", type: "status" },
+    { name: "Engagement", value: Math.random() > 0.5 ? "Increasing" : "Steady", type: "trend" }
+  ];
+  
+  // Code quality metrics
+  const qualityMetrics: QualityMetric[] = [
+    { name: "Code Complexity", description: "Average cyclomatic complexity per function", value: Math.random() * 8 + 2 },
+    { name: "Test Coverage", description: "Percentage of code covered by tests", value: Math.floor(Math.random() * 100) },
+    { name: "Documentation Level", description: "Percentage of documented public API", value: Math.floor(Math.random() * 100) },
+    { name: "Technical Debt", description: "Hours needed to fix all issues", value: Math.floor(Math.random() * 200) },
+    { name: "Dependencies", description: "Number of external dependencies", value: Math.floor(Math.random() * 50) + 5 }
+  ];
+  
+  // Technical capabilities assessment
+  const capabilities: Capability[] = [
+    { name: "Performance", score: Math.floor(Math.random() * 40) + 60, rating: "Good", description: "Efficient runtime performance with minimal bottlenecks" },
+    { name: "Security", score: Math.floor(Math.random() * 30) + 70, rating: "Excellent", description: "Strong security practices with regular dependency updates" },
+    { name: "Maintainability", score: Math.floor(Math.random() * 20) + 75, rating: "Excellent", description: "Well-structured codebase with clear separation of concerns" },
+    { name: "Scalability", score: Math.floor(Math.random() * 50) + 50, rating: "Fair", description: "Reasonably scalable architecture with some potential bottlenecks" },
+    { name: "Testability", score: Math.floor(Math.random() * 40) + 60, rating: "Good", description: "Decent test coverage with room for improvement" }
+  ];
+  
+  // Key findings
+  const keyFindings: KeyFinding[] = [
+    { type: "positive", text: "Strong community engagement with regular contributions" },
+    { type: "positive", text: "Comprehensive documentation making it easy for new contributors" },
+    { type: "negative", text: "Some potential security vulnerabilities in dependencies" },
+    { type: "negative", text: "Test coverage could be improved in critical modules" }
+  ];
+  
+  // Highlights
+  const highlights: Highlight[] = [
+    { title: "Active Development", description: "Regular commits and active development cycle" },
+    { title: "Community Support", description: "Responsive maintainers address issues quickly" },
+    { title: "Well Documented", description: "Excellent documentation and examples for users" }
+  ];
+  
+  // Recommendations
+  const recommendations: Recommendation[] = [
+    { title: "Improve Test Coverage", description: "Add more unit and integration tests to critical modules" },
+    { title: "Update Dependencies", description: "Several dependencies have newer versions available" },
+    { title: "Optimize Performance", description: "Profile and optimize performance bottlenecks in data processing" }
+  ];
+  
+  // Language determination
+  const languages = ["JavaScript", "TypeScript", "Python", "Rust", "Go", "Java"];
+  const language = languages[Math.floor(Math.random() * languages.length)];
+  
+  // Language color (simplified)
+  const languageColors = {
     "JavaScript": "#f1e05a",
     "TypeScript": "#3178c6",
     "Python": "#3572A5",
-    "Java": "#b07219",
-    "Go": "#00ADD8"
+    "Rust": "#dea584",
+    "Go": "#00ADD8",
+    "Java": "#b07219"
   };
   
-  const languages = Object.keys(languageColors);
-  const language = languages[randomNum(0, languages.length - 1)];
+  const languageColor = languageColors[language as keyof typeof languageColors];
+  
+  // Licenses
+  const licenses = ["MIT", "Apache-2.0", "GPL-3.0", "BSD-3-Clause", "None"];
+  const license = licenses[Math.floor(Math.random() * licenses.length)];
   
   return {
     repository: {
-      name: `${ownerName}/${repoName}`,
-      description: `A high-quality ${language} repository for ${repoName.replace(/-/g, ' ')}`,
-      ownerAvatar: `https://avatars.githubusercontent.com/${ownerName}`,
-      stars: randomNum(100, 5000).toLocaleString(),
-      forks: randomNum(20, 1000).toLocaleString(),
-      issues: randomNum(5, 100).toLocaleString(),
+      name: repoName,
+      description: `A high-quality ${language} project for ${repoName.split('-').join(' ')}`,
+      ownerAvatar: `https://github.com/${owner}.png`,
+      stars,
+      forks,
+      issues,
       score: overallScore,
-      scoreDescription: `This repository has a ${overallScore >= 80 ? "strong" : "good"} quality score indicating ${overallScore >= 80 ? "excellent" : "decent"} code quality and community engagement.`,
-      percentileRank: `Top ${randomNum(5, 25)}%`,
-      lastUpdated: `${randomNum(1, 30)} days ago`,
-      contributors: randomNum(5, 50).toString(),
+      scoreDescription: overallScore > 90 ? "Exceptional" : overallScore > 80 ? "Excellent" : overallScore > 70 ? "Very Good" : "Good",
+      percentileRank: `${Math.floor(Math.random() * 15) + 85}%`,
+      lastUpdated: new Date().toLocaleDateString(),
+      contributors,
       language,
-      languageColor: languageColors[language],
-      license: ["MIT", "Apache-2.0", "GPL-3.0", "BSD-3-Clause"][randomNum(0, 3)]
+      languageColor,
+      license
     },
     codeQuality: {
-      score: randomNum(70, 95),
-      metrics: [
-        {
-          name: "Code Complexity",
-          description: "Measure of code complexity and cognitive load",
-          value: randomNum(70, 95)
-        },
-        {
-          name: "Documentation",
-          description: "Code comments and documentation coverage",
-          value: randomNum(60, 90)
-        },
-        {
-          name: "Test Coverage",
-          description: "Percentage of code covered by tests",
-          value: randomNum(50, 95)
-        },
-        {
-          name: "Code Duplication",
-          description: "Amount of redundant or duplicated code",
-          value: randomNum(75, 95)
-        }
-      ]
+      score: Math.floor(Math.random() * 30) + 70,
+      metrics: qualityMetrics
     },
     activityMetrics: {
-      score: randomNum(65, 95),
+      score: Math.floor(Math.random() * 20) + 80,
       commitHistory,
-      summary: [
-        {
-          label: "Avg. Commits/Month",
-          value: randomNum(20, 100).toString()
-        },
-        {
-          label: "Active Contributors",
-          value: randomNum(3, 15).toString()
-        },
-        {
-          label: "Response Time",
-          value: `${randomNum(1, 5)} days`
-        },
-        {
-          label: "Release Frequency",
-          value: `${randomNum(1, 4)}/month`
-        }
-      ]
+      summary: activitySummary
     },
     communityEngagement: {
-      score: randomNum(60, 90),
+      score: Math.floor(Math.random() * 25) + 75,
       growthMetrics,
-      metrics: [
-        {
-          name: "Issue Resolution Rate",
-          value: `${randomNum(70, 95)}`,
-          type: "percentage"
-        },
-        {
-          name: "PR Review Time",
-          value: `${randomNum(1, 5)} days`,
-          type: "trend"
-        },
-        {
-          name: "Community Guidelines",
-          value: "Present",
-          type: "status"
-        },
-        {
-          name: "Contributor Growth",
-          value: `${randomNum(5, 30)}`,
-          type: "percentage"
-        }
-      ]
+      metrics: communityMetrics
     },
     capabilities,
-    keyFindings: [
-      {
-        type: "positive",
-        text: `Strong ${capabilities[0].name.toLowerCase()} practices with clear structure and maintainability.`
-      },
-      {
-        type: "positive",
-        text: `Active contribution community with consistent commit activity.`
-      },
-      {
-        type: "negative",
-        text: `${capabilities.sort((a, b) => a.score - b.score)[0].name} could be improved for better project quality.`
-      },
-      {
-        type: "negative",
-        text: `Documentation could benefit from more examples and use cases.`
-      }
-    ],
-    highlights: [
-      {
-        title: "Robust CI/CD Pipeline",
-        description: "Repository has well-configured automated testing and deployment processes."
-      },
-      {
-        title: "Active Issue Management",
-        description: "Issues are addressed promptly with good discussion and resolution."
-      },
-      {
-        title: "Clear Documentation",
-        description: "README and documentation provide clear guidance for users and contributors."
-      },
-      {
-        title: "Consistent Coding Style",
-        description: "Code follows established style guidelines with good readability."
-      }
-    ],
-    recommendations: [
-      {
-        title: "Increase Test Coverage",
-        description: "Add more unit and integration tests to improve reliability and maintainability."
-      },
-      {
-        title: "Enhance Documentation",
-        description: "Add more examples and use cases to help new users get started quickly."
-      },
-      {
-        title: "Optimize Performance",
-        description: "Consider performance optimizations in critical code paths."
-      },
-      {
-        title: "Improve Issue Templates",
-        description: "Create more detailed issue templates to standardize bug reports and feature requests."
-      }
-    ]
+    keyFindings,
+    highlights,
+    recommendations
   };
 };
